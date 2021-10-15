@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -15,9 +13,10 @@
 	<name>swagger-validator</name>
 	<description>Swagger request validator for Spring Boot</description>
 	<properties>
-		<java.version>14</java.version>
+		<java.version>15</java.version>
 		<swagger.request.validator.springmvc>2.18.1</swagger.request.validator.springmvc>
 		<json-path>2.6.0</json-path>
+		<swagger-request-validator.version>2.19.5</swagger-request-validator.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -32,8 +31,18 @@
 		</dependency>
 		<dependency>
 			<groupId>com.atlassian.oai</groupId>
+			<artifactId>swagger-request-validator-core</artifactId>
+			<version>${swagger-request-validator.version}</version>
+		</dependency>
+<!-- 		<dependency>
+			<groupId>com.atlassian.oai</groupId>
 			<artifactId>swagger-request-validator-springmvc</artifactId>
 			<version>${swagger.request.validator.springmvc}</version>
+		</dependency>
+ -->		<dependency>
+			<groupId>com.atlassian.oai</groupId>
+			<artifactId>swagger-request-validator-core</artifactId>
+			<version>${swagger-request-validator.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
@@ -58,12 +67,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>org.ashu.schema.validation.SpringApplication</mainClass>
+					<executable>false</executable>
+					<classifier>exec</classifier>
+				</configuration>
 			</plugin>
-			 <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 
