@@ -1,25 +1,34 @@
 package org.ashu.validation.service;
 
+import static java.util.Collections.singletonList;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.ashu.validation.config.RestRequestLoggingValidationConfig;
+import org.ashu.validation.util.JsonProcessor;
+import org.ashu.validation.util.ResourceUtils;
 import org.generated.models.Pet;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import com.atlassian.oai.validator.OpenApiInteractionValidator;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.net.MediaType;
 
 /**
  * Testing with non-default context-path and a custom created
@@ -33,20 +42,25 @@ public class RestRequestValidationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
-    
+
+  	@Autowired
+  	private JsonProcessor jsonProcessor;
+  	
     @Test
     public void testGet_success() {
         final Map<String, List<String>> additionalHeaders = ImmutableMap
                 .of("headerValue", singletonList("valueHeader"));
-        Class<List<Pet>> clazz = (Class) List.class;  
-    	final ResponseEntity<List<Pet>> response = restRequest("/pet?page=1&size=2",
-                HttpMethod.GET, null /* no body */, additionalHeaders,clazz);
-
-
+//       TypeReference<List<Pet>> ref = new TypeReference<List<Pet>>() {};
+       ParameterizedTypeReference ref  = new ParameterizedTypeReference<List<Pet>>() {};
+        final ResponseEntity<List<Pet>> response = restRequest("/pet?page=1&size=2",
+                HttpMethod.GET, null /* no body */, additionalHeaders, ref);
+        
         // then: 'the response contains the header, path variable and query parameter'
-    	final Map<String, Object> expectedBody = ImmutableMap.of("headerValue", "valueHeader",
-                "pathVariable", "variablePath",
-                "requestParam", "paramRequest");
+    		String getResponse = ResourceUtils.readFileToString("getAllPetsResponse.json", "response");
+    		final List<Pet> expectedBody = jsonProcessor.readValue(getResponse, new TypeReference<List<Pet>>() {
+    		});
+
+//        final Map<String, Object> expectedBody = ImmutableMap.of(pets);
         assertOkRequest(response, expectedBody);
     }
 
@@ -167,39 +181,40 @@ public class RestRequestValidationTest {
 //
 //    @Test
 //    public void testDelete_invalidResponse() {
-//        final ResponseEntity<HashMap> response = requestWithInvalidResponse("/spring/1", HttpMethod.DELETE,
-//                null, Collections.emptyMap());
+//    	TypeReference<List<Pet>> ref = new TypeReference<List<Pet>> () {};
+//        final ResponseEntity<List<Pet>> response = requestWithInvalidResponse("/spring/1", HttpMethod.DELETE,
+//                null, Collections.emptyMap(), ref);
 //
 //        // then: 'invalid response, wrong status code'
 //        assertBadResponse(response,
 //                "Response status 200 not defined for path '/spring/{pathVariable}'.");
 //    }
 
-    private <T> ResponseEntity<T> restRequest(final String uri, final HttpMethod method, Class<T> classz) {
-        return restRequest(uri, method, null /* no body */, classz);
+    private <T> ResponseEntity<T> restRequest(final String uri, final HttpMethod method, ParameterizedTypeReference<T> ref) {
+        return restRequest(uri, method, null /* no body */, ref);
     }
 
-    private <T> ResponseEntity<T> restRequest(final String uri, final HttpMethod method, final Object body, Class<T> classz) {
-        return restRequest(uri, method, body, ImmutableMap.of(), classz);
+    private <T> ResponseEntity<T> restRequest(final String uri, final HttpMethod method, final Object body, ParameterizedTypeReference<T> ref) {
+        return restRequest(uri, method, body, ImmutableMap.of(), ref);
     }
 
     private <T> ResponseEntity<T> restRequest(final String uri, final HttpMethod method, final Object body,
-                                                final Map<String, List<String>> additionalHeader, Class<T> classz) {
+                                                final Map<String, List<String>> additionalHeader, ParameterizedTypeReference<T> ref) {
         final HttpHeaders headers = new HttpHeaders();
         headers.setAccept(singletonList(MediaType.APPLICATION_JSON));
         headers.putAll(additionalHeader);
         final HttpEntity<Object> entity = new HttpEntity<>(body, headers);
-        return restTemplate.exchange(uri, method, entity, classz);
+        return restTemplate.exchange(uri, method, entity, ref);
     }
 
-    private ResponseEntity<HashMap> requestWithInvalidResponse(final String uri, final HttpMethod method,
-                                                               final Object body, final Map<String, List<String>> additionalHeader) {
+    private <T> ResponseEntity<T> requestWithInvalidResponse(final String uri, final HttpMethod method,
+                                                               final Object body, final Map<String, List<String>> additionalHeader, TypeReference<T> ref) {
         final HttpHeaders headers = new HttpHeaders();
         headers.setAccept(singletonList(MediaType.APPLICATION_JSON));
         headers.putAll(additionalHeader);
         headers.put("invalidResponse", singletonList("true"));
         final HttpEntity<Object> entity = new HttpEntity<>(body, headers);
-        return restTemplate.exchange(uri, method, entity, HashMap.class);
+        return restTemplate.exchange(uri, method, entity, convert(ref));
     }
 
     private ResponseEntity<HashMap> octetStreamRequest(final String uri, final HttpMethod method, final Object body) {
@@ -209,9 +224,9 @@ public class RestRequestValidationTest {
         return restTemplate.exchange(uri, method, entity, HashMap.class);
     }
 
-    private void assertOkRequest(final ResponseEntity<List<Pet>> response, final Map<String, Object> body) {
+    private void assertOkRequest(final ResponseEntity<List<Pet>> response, final List<Pet> body) {
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(response.getBody(), equalTo(body.entrySet()));
+        assertThat(response.getBody(), equalTo(body));
     }
 
     private void assertBadRequest(final ResponseEntity<HashMap> response, final String message) {
@@ -223,4 +238,8 @@ public class RestRequestValidationTest {
         assertThat(response.getStatusCode(), equalTo(HttpStatus.INTERNAL_SERVER_ERROR));
         assertThat(response.getBody().get("message").toString(), containsString(message));
     }
+    
+    public static <T> Class<T> convert(TypeReference<T> ref) {
+      return (Class<T>)((ParameterizedType) ref.getType()).getRawType();
+  }
 }
