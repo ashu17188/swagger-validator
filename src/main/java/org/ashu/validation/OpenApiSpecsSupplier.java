@@ -1,4 +1,4 @@
-package org.ashu.schema.validation;
+package org.ashu.validation;
 
 import java.util.HashMap;
 import java.util.List;

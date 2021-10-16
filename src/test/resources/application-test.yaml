@@ -1,0 +1,13 @@
+themeleaf:
+    origin: "India"
+
+spring:
+    profiles: 
+        include: validation
+    application:
+        name: "swagger-validation-poc"
+
+server:
+    port: 8081
+    servlet:
+        context-path: "/api/swagger-validation-poc/v1"

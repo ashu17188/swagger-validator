@@ -1,4 +1,4 @@
-package org.ashu.schema.validation;
+package org.ashu.validation;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

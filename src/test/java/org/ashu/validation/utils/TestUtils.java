@@ -1,4 +1,4 @@
-package org.ashu.schema.validation.utils;
+package org.ashu.validation.utils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

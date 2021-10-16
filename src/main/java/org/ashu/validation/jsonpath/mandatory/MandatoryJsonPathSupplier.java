@@ -1,4 +1,4 @@
-package org.ashu.schema.validation.jsonpath.mandatory;
+package org.ashu.validation.jsonpath.mandatory;
 
 import java.util.List;
 

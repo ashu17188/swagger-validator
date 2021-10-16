@@ -1,4 +1,4 @@
-package org.ashu.schema.validation.jsonpath.mandatory;
+package org.ashu.validation.jsonpath.mandatory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +8,8 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.ashu.schema.validation.GenericRequestValidator;
-import org.ashu.schema.validation.util.ValidationUtils;
+import org.ashu.validation.GenericRequestValidator;
+import org.ashu.validation.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,6 @@ public class JsonPathMandatoryValidator implements GenericRequestValidator {
 	public static final String SCHEMA_REQUIRED = "validation.request.body.schema.required.json-path";
 	public static final String SCHEMA_REQUIRED_MESSAGE = "Object has missing required properties in path ([\"%s\"])";
 
-	@Autowired
 	private List<MandatoryJsonPathSupplier> mandatoryJsonPathSuppliers;
 
 	@Autowired
