@@ -1,0 +1,19 @@
+json-paths:
+    swaggerPaths:
+      - paths: /quotes
+        method: POST
+        mandatory:
+            jsonpaths:
+                - $.adfasdfasdf
+                - $.dfadsafdsaf
+        conditional:
+            - conditions:
+                - jsonPath: $.header.client_id
+                  values: ['abc', 'new-client']
+              jsonPaths:
+                - $.request.vehicles[:1].usuage.category
+            - conditions:
+                - jsonPath: $.header.client_id
+                  values: ['a2', 'b2']
+              jsonPaths:
+                - $.request.insuredParties.drivers[:1].additionalDriver

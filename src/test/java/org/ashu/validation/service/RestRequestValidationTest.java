@@ -51,7 +51,7 @@ public class RestRequestValidationTest {
         final Map<String, List<String>> additionalHeaders = ImmutableMap
                 .of("headerValue", singletonList("valueHeader"));
 //       TypeReference<List<Pet>> ref = new TypeReference<List<Pet>>() {};
-       ParameterizedTypeReference ref  = new ParameterizedTypeReference<List<Pet>>() {};
+       ParameterizedTypeReference <List<Pet>> ref  = new ParameterizedTypeReference<List<Pet>>() {};
         final ResponseEntity<List<Pet>> response = restRequest("/pet?page=1&size=2",
                 HttpMethod.GET, null /* no body */, additionalHeaders, ref);
         
