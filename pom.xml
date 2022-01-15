@@ -15,9 +15,9 @@
 	<name>swagger-validator</name>
 	<description>Swagger request validator for Spring Boot</description>
 	<properties>
-		<java.version>15</java.version>
+		<java.version>12</java.version>
 		<json-path>2.6.0</json-path>
-		<swagger-request-validator-springmvc-version>2.20.0</swagger-request-validator-springmvc-version>
+		<swagger-request-validator-springmvc-version>2.23.1-SNAPSHOT</swagger-request-validator-springmvc-version>
 	</properties>
 	<scm>
 		<connection>scm:git@github.com:ashu17188/swagger-validator.git</connection>
@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>org.ashu.java</groupId>
 			<artifactId>openapi-spec</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.atlassian.oai</groupId>

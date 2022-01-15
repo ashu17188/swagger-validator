@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.ashu.validation.config.RestRequestLoggingValidationConfig;
 import org.ashu.validation.util.JsonProcessor;
 import org.ashu.validation.util.ResourceUtils;
 import org.generated.models.Pet;
@@ -42,27 +41,27 @@ public class RestRequestValidationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
-  	@Autowired
-  	private JsonProcessor jsonProcessor;
-  	
-    @Test
-    public void testGet_success() {
-        final Map<String, List<String>> additionalHeaders = ImmutableMap
-                .of("headerValue", singletonList("valueHeader"));
-//       TypeReference<List<Pet>> ref = new TypeReference<List<Pet>>() {};
-       ParameterizedTypeReference <List<Pet>> ref  = new ParameterizedTypeReference<List<Pet>>() {};
-        final ResponseEntity<List<Pet>> response = restRequest("/pet?page=1&size=2",
-                HttpMethod.GET, null /* no body */, additionalHeaders, ref);
-        
-        // then: 'the response contains the header, path variable and query parameter'
-    		String getResponse = ResourceUtils.readFileToString("getAllPetsResponse.json", "response");
-    		final List<Pet> expectedBody = jsonProcessor.readValue(getResponse, new TypeReference<List<Pet>>() {
-    		});
-
-//        final Map<String, Object> expectedBody = ImmutableMap.of(pets);
-        assertOkRequest(response, expectedBody);
-    }
+//
+//  	@Autowired
+//  	private JsonProcessor jsonProcessor;
+//  	
+//    @Test
+//    public void testGet_success() {
+//        final Map<String, List<String>> additionalHeaders = ImmutableMap
+//                .of("headerValue", singletonList("valueHeader"));
+////       TypeReference<List<Pet>> ref = new TypeReference<List<Pet>>() {};
+//       ParameterizedTypeReference <List<Pet>> ref  = new ParameterizedTypeReference<List<Pet>>() {};
+//        final ResponseEntity<List<Pet>> response = restRequest("/pet?page=1&size=2",
+//                HttpMethod.GET, null /* no body */, additionalHeaders, ref);
+//        
+//        // then: 'the response contains the header, path variable and query parameter'
+//    		String getResponse = ResourceUtils.readFileToString("getAllPetsResponse.json", "response");
+//    		final List<Pet> expectedBody = jsonProcessor.readValue(getResponse, new TypeReference<List<Pet>>() {
+//    		});
+//
+////        final Map<String, Object> expectedBody = ImmutableMap.of(pets);
+//        assertOkRequest(response, expectedBody);
+//    }
 
 //    @Test
 //    public void testGet_invalidRequest() {

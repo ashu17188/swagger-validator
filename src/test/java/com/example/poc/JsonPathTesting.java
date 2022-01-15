@@ -3,12 +3,9 @@ package com.example.poc;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.ashu.validation.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +44,27 @@ public class JsonPathTesting {
 		maxMin(arr);
 		log.info("max-min array: {}", arr);
 	}
+	
+	@Test
+	public void test_MinJumps() {
+		int[] jumps = {2, 1, 1, 1, 4};
+   log.info("Min jumps {}",countMinJumps(jumps));
+	}
+	
+	public int countMinJumps(int[] jumps) {
+    int[] dp = new int[jumps.length];
+
+    //initialize with infinity, except the first index which should be zero as we start from there
+    for(int i=1; i<jumps.length; i++)
+      dp[i] = Integer.MAX_VALUE;
+
+    for(int start=0; start < jumps.length-1; start++) {
+      for(int end=start+1; end <= start+jumps[start] && end < jumps.length; end++)
+        dp[end] = Math.min(dp[end], dp[start]+1);
+    }
+
+    return dp[jumps.length-1];
+  }
 	
   public static void maxMin(int[] arr) {
     int maxIdx = arr.length - 1;
