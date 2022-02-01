@@ -1,3 +1,10 @@
 spring:
     application:
         name: "swagger-validator"
+server:
+    error:
+        include-message: always
+open:
+  api:
+    spec:
+      url: myspec.yml
