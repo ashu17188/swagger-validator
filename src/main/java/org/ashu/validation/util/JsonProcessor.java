@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class JsonProcessor {
 
-	private ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
 	public JsonProcessor(ObjectMapper objectMapper) {
 		super();
