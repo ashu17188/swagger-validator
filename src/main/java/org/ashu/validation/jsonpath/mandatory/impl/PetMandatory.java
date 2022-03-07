@@ -2,7 +2,7 @@ package org.ashu.validation.jsonpath.mandatory.impl;
 
 import java.util.List;
 
-import org.ashu.validation.jsonpath.mandatory.MandatoryJsonPathSupplier;
+import org.ashu.validation.validator.MandatoryJsonPathSupplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

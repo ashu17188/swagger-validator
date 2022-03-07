@@ -1,10 +1,12 @@
-package org.ashu.validation.jsonpath.mandatory;
+package org.ashu.validation.validator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,13 +36,21 @@ public class JsonPathMandatoryValidator implements GenericRequestValidator {
 	private List<MandatoryJsonPathSupplier> mandatoryJsonPathSuppliers;
 
 	@Autowired
-	private Configuration conf;
+	protected Configuration conf;
 
 	@Autowired
-	private ValidationUtils validationUtils;
+	protected ValidationUtils validationUtils;
 
+	public JsonPathMandatoryValidator(List<MandatoryJsonPathSupplier> mandatoryJsonPathSuppliers,
+			Configuration conf,
+			ValidationUtils validationUtils) {
+		this.mandatoryJsonPathSuppliers = mandatoryJsonPathSuppliers;
+		this.conf = conf;
+		this.validationUtils = validationUtils;
+	}
+	
 	@Override
-	public ValidationReport validate(Request request, ApiOperation apiOperation) {
+	public ValidationReport validate(@Nonnull Request request,@Nonnull ApiOperation apiOperation) {
 		List<MandatoryJsonPathSupplier> jsonPathsSuppliers = Optional.ofNullable(this.mandatoryJsonPathSuppliers)
 				.orElseGet(Collections::emptyList);
 		List<String> missingFields = new ArrayList<>();
@@ -57,7 +67,7 @@ public class JsonPathMandatoryValidator implements GenericRequestValidator {
 				}
 			}
 		}
-		return validationUtils.processMessage(SCHEMA_REQUIRED_MESSAGE, SCHEMA_REQUIRED, missingFields);
+		return validationUtils.processMessages(SCHEMA_REQUIRED_MESSAGE, SCHEMA_REQUIRED, missingFields);
 	}
 
 	public static List<String> validateMandatoryFields(DocumentContext context, List<String> mandatoryJsonPaths) {

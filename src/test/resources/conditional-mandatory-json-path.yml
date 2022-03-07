@@ -1,0 +1,5 @@
+- conditions:
+  - jsonPath: $.request.discount[*].type
+    values: ['AMD', 'APPROVAL']
+  jsonPaths:
+    - $.request.discount[?(@.approvedBy == 'tester')]

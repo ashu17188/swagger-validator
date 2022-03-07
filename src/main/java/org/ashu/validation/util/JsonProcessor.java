@@ -25,6 +25,14 @@ public class JsonProcessor {
 		}
 	}
 
+	public <T> T jsonToObject(String jsonString, Class<T> type) {
+		try {
+			return this.objectMapper.readValue(jsonString, type);
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to create object from json");
+		}
+	}
+	
 	public <T> T readValue(String content, Class<T> type) {
 		try {
 			return this.objectMapper.readValue(content, type);

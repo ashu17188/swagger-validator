@@ -42,7 +42,7 @@ public class ValidationUtils {
 
 	}
 
-	public ValidationReport processMessage(String messageKey, String messageFormat, List<String> errorJsonPaths) {
+	public ValidationReport processMessages(String messageKey, String messageFormat, List<String> errorJsonPaths) {
 		return mergeValidationReports(errorJsonPaths.stream()
 				.map(jsonPath -> ValidationReport
 						.singleton((ValidationReport.Message.create(messageKey, String.format(messageFormat, jsonPath)).build())))
