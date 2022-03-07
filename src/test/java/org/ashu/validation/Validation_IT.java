@@ -1,5 +1,8 @@
 package org.ashu.validation;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.ashu.validation.test.TestConfig;
 import org.ashu.validation.util.ValidationUtils;
 import org.generated.models.BadRequestField;
@@ -11,8 +14,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +37,7 @@ public class Validation_IT {
 
 	@DisplayName("Conditional Mandatory: Throws BadRequest")
 	@Test
-	void testPostProposalwithConditionalMandatory() {
+	void testPostProposalwithConditionalMandatory(@Autowired MockMvc mockMvc) {
 		BadRequestField badRequestField = new BadRequestField();
 		badRequestField.setNameOfField("approvedBy == tester");
 		badRequestField.setUrn("body:$.request.discount[?(@.approvedBy == 'tester')]");
@@ -48,7 +54,15 @@ public class Validation_IT {
 				.header("client-id", "test-id")
 				.header("workflow_status", "1")
 				.header("user-id", "test");
-		
+		MvcResult result = mockMvc.perform(mockHttpServletRequestBuilder)
+				.andDo(print())
+				.andExpect(status().isBadRequest())
+				.andReturn();
+		assertNotNull(result.getResponse());
+		ObjectMapper objectMapper = new ObjectMapper();
+		BadRequest badRequest = objectMapper.readValue(result.getResponse().getContentAsString(), BadRequest.class); 
+		assertNotNull(badRequest);
+		assertTrue(badRequest.equals(badRequestField.getNameOfField()))
 	}
 	
 	private String getProposalPayload(String jsonResourcePath) throws JsonProcessingException{
