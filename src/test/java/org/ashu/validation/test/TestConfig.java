@@ -25,15 +25,15 @@ public class TestConfig {
 		}
 	
 		
-		@Bean
-		@Primary
-		public ObjectMapper getTestObjectMapper() {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-			mapper.registerModule(new Jdk8Module())
-			.registerModule(new JavaTimeModule())
-			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-			
-			return mapper;
-		}
+//		@Bean
+//		@Primary
+//		public ObjectMapper getTestObjectMapper() {
+//			ObjectMapper mapper = new ObjectMapper();
+//			mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//			mapper.registerModule(new Jdk8Module())
+//			.registerModule(new JavaTimeModule())
+//			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+//			
+//			return mapper;
+//		}
 }

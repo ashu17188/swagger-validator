@@ -1,0 +1,20 @@
+{
+  "category": {
+    "id": 12,
+    "name": "Dogs"
+  },
+  "id": 10,
+  "name": "doggie",
+  "photoUrls": [
+    "string"
+  ],
+  "status": "available",
+  "tags": [
+    {
+      "id": 0,
+      "name": "string"
+    }
+  ],
+  "buy_date": "2022-02-24",
+  "transaction_date": "2022-02-24T16:04:22Z"
+}
