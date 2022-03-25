@@ -49,6 +49,7 @@ public class Validation_IT {
 		badRequestField.setUrn("body:$.request.discount[?(@.approvedBy == 'tester')]");
 		badRequestField.setMessage("Object has missing required properties in path");
 
+		//context path: /api/swagger-validation-poc/v1
 		MockHttpServletRequestBuilder  mockHttpServletRequestBuilder =  
 				MockMvcRequestBuilders.post("/api/v1/pet")
 				.contentType(MediaType.APPLICATION_JSON)

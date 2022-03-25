@@ -16,7 +16,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({"org.ashu.validation"})
+@ComponentScan({"org.ashu.validation","org.ashu.validation.validator"})
 public class TestConfig {
 
 		@Bean
